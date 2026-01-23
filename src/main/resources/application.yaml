@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: homnayangi-service
+
+server:
+  port: 8080
+  servlet:
+    context-path: /homnayangi-service
+
+
