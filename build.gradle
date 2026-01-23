@@ -6,6 +6,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
     id 'com.github.spotbugs' version '6.0.1'
     id 'com.avast.gradle.docker-compose' version '0.16.13'
+    id 'org.openapi.generator' version '7.3.0'
 }
 
 group = 'com.camlong'
@@ -35,6 +36,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	implementation 'org.flywaydb:flyway-database-postgresql'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
@@ -75,4 +77,22 @@ spotbugs {
     ignoreFailures = false
     showStackTraces = true
     excludeFilter = file('config/spotbugs/excludeFilter.xml')
+}
+
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$rootDir/src/main/resources/openapi.yaml"
+    outputDir = "$buildDir/generated"
+    apiPackage = "com.camlong.homnayangi.inbound.apis"
+    modelPackage = "com.camlong.homnayangi.inbound.models"
+//    invokerPackage = "com.camlong.invoker"
+
+    configOptions = [
+            interfaceOnly      : "true",
+            useSpringBoot3     : "true",
+            dateLibrary        : "java8",
+            useTags            : "true",
+            openApiNullable    : "false",
+            serializationLibrary: "jackson"
+    ]
 }
