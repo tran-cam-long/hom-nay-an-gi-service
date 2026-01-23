@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    host: localhost
+    port: 5432
+    dbname: demo_app
+    url: jdbc:postgresql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.dbname}
+    username: postgres
+    password: postgres
+  liquibase:
+    change-log: classpath:db/liquibase-changelog-test.xml
+    enabled: true

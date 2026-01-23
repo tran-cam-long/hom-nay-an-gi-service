@@ -1,7 +1,11 @@
+import java.time.Duration
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.0.1'
 	id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.github.spotbugs' version '6.0.1'
+    id 'com.avast.gradle.docker-compose' version '0.16.13'
 }
 
 group = 'com.camlong'
@@ -46,4 +50,29 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+dockerCompose {
+    useComposeFiles = [file('cd/docker/docker-compose-local.yml')] as Iterable<? extends String>
+    removeOrphans = true
+    waitForHealthyStateTimeout = Duration.ofMinutes(1)
+}
+
+tasks.register('startTestEnvironment') {
+    dependsOn 'composeUp'
+}
+
+tasks.register('stopTestEnvironment') {
+    dependsOn 'composeDown'
+}
+
+tasks.register('startApp') {
+    dependsOn tasks.named('startTestEnvironment')
+}
+
+spotbugs {
+    toolVersion = '4.8.3'
+    ignoreFailures = false
+    showStackTraces = true
+    excludeFilter = file('config/spotbugs/excludeFilter.xml')
 }
