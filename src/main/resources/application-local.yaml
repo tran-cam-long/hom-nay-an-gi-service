@@ -1,4 +1,9 @@
 spring:
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create
   datasource:
     host: localhost
     port: 5432
@@ -8,4 +13,11 @@ spring:
     password: postgres
   liquibase:
     change-log: classpath:db/liquibase-changelog-test.xml
-    enabled: true
+    enabled: false
+  security:
+    user:
+      name: admin
+      password: admin
+
+server:
+  port: 8099
