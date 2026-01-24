@@ -2,11 +2,10 @@ package com.camlong.homnayangi.outbound.db.entities;
 
 import com.camlong.homnayangi.application.constants.District;
 import com.camlong.homnayangi.application.domain.models.GoogleSource;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.data.geo.Point;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -21,7 +20,7 @@ public class LocationEntity extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -34,10 +33,13 @@ public class LocationEntity extends BaseEntity implements Serializable {
     private District district;
 
     @Column
-    private Float lat;
+    private String address;
 
     @Column
-    private Float lng;
+    private String openingHours;
+
+    @Column(columnDefinition = "geography(Point,4326)")
+    private Point coordinate;
 
     @Column
     private Float maxPrice;
