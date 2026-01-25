@@ -48,6 +48,9 @@ public class AuthServiceImpl implements AuthService {
 
     final String accessToken = jwtUtils.generateToken(username, List.of(appUser.getRole()));
     final String refreshToken = jwtUtils.generateRefreshToken(username);
+
+    createRefreshToken(username, refreshToken);
+
     appUser.setAccessToken(accessToken);
     appUser.setRefreshToken(refreshToken);
 
@@ -82,11 +85,11 @@ public class AuthServiceImpl implements AuthService {
     userRepository.save(user);
   }
 
-  private ApplicationRefreshToken createRefreshToken(String username, String token) {
+  private void createRefreshToken(String username, String token) {
     final ApplicationRefreshToken refreshToken = ApplicationRefreshToken.builder()
         .username(username).token(token).expiryTime(Instant.now().plusMillis(refreshExpiration)).build();
 
-    return repository.save(refreshToken);
+    repository.save(refreshToken);
   }
 
   private ApplicationRefreshToken verifyRefreshToken(String token) {
