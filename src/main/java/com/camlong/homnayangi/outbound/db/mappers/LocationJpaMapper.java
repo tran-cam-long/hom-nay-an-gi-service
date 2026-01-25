@@ -4,7 +4,7 @@ import com.camlong.homnayangi.application.domain.models.Location;
 import com.camlong.homnayangi.outbound.db.entities.LocationEntity;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface LocationJpaMapper {
 
     Location toLocation(final LocationEntity entity);

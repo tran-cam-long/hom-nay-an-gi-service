@@ -10,9 +10,15 @@ spring:
     change-log: classpath:db/liquibase-changelog-test.xml
     enabled: false
   jpa:
-    hibernate:
-      ddl-auto: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create
   security:
     user:
       name: admin
       password: admin
+
+jwt:
+  secret: cqManIGq8R3i52nC8rL2wBEqBYuacxQ8pd14OTh5fLu
+
