@@ -29,6 +29,8 @@ repositories {
 	mavenCentral()
 }
 
+def mapstructVersion = "1.5.5.Final"
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -59,6 +61,8 @@ dependencies {
 	// Jackson CSV and databind for CSV parsing
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.15.2'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 }
 
 tasks.named('test') {
