@@ -27,6 +27,15 @@ public class CuisineDishEntity extends BaseEntity implements Serializable {
     private String name;
 
     @Column
+    private String searchKeyword;
+
+    @Column
     private String type;
+
+    @Column
+    private String culture;
+
+    @Column
+    private String imageUrl;
 
 }
