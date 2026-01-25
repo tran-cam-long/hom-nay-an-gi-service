@@ -1,5 +1,6 @@
 package com.camlong.homnayangi.inbound.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,6 +21,9 @@ public class JwtUtils {
   @Value("${jwt.expiration}")
   private long expiration;
 
+  @Value("${jwt.refresh-expiration}")
+  private long refreshExpiration;
+
   private Key getSigningKey() {
     return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
   }
@@ -33,16 +37,24 @@ public class JwtUtils {
         .compact();
   }
 
-  public String extractUsername(String token) {
+  public String generateRefreshToken(String username) {
+    return Jwts.builder()
+        .setSubject(username)
+        .setIssuedAt(new Date())
+        .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
+        .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+        .compact();
+  }
+
+  public Claims extractClaims(String token) {
     return Jwts.parserBuilder()
         .setSigningKey(getSigningKey())
-        .build().parseClaimsJwt(token)
-        .getBody().getSubject();
+        .build().parseClaimsJwt(token).getBody();
   }
 
   public boolean isTokenValid(String token) {
     try {
-      extractUsername(token);
+      extractClaims(token).getSubject();
       return true;
     } catch (JwtException | IllegalArgumentException e) {
       return false;

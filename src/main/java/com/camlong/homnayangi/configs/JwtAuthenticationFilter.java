@@ -1,7 +1,7 @@
 package com.camlong.homnayangi.configs;
 
-import com.camlong.homnayangi.application.usermangement.ApplicationUserDetailsService;
 import com.camlong.homnayangi.inbound.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,19 +9,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final ApplicationUserDetailsService applicationUserDetailsService;
 
     @Override
     @NullMarked
@@ -32,10 +34,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final String token = authHeader.substring(7);
 
             if (jwtUtils.isTokenValid(token)) {
-                final String username = jwtUtils.extractUsername(token);
-                final UserDetails userDetails = applicationUserDetailsService.loadUserByUsername(username);
+                final Claims claims = jwtUtils.extractClaims(token);
+                final List<String> roles = claims.get("roles", List.class);
+                final List<SimpleGrantedAuthority> authorities = roles.stream()
+                    .map(SimpleGrantedAuthority::new).toList();
+                final UserDetails userDetails = User.withUsername(claims.getSubject())
+                    .roles(String.valueOf(roles)).build();
+
                 final UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }

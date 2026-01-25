@@ -1,6 +1,6 @@
 package com.camlong.homnayangi.configs;
 
-import com.camlong.homnayangi.application.usermangement.ApplicationUserDetailsService;
+import com.camlong.homnayangi.application.usermangement.impl.ApplicationUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
