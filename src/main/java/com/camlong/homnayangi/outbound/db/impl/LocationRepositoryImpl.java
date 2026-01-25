@@ -1,7 +1,7 @@
 package com.camlong.homnayangi.outbound.db.impl;
 
 import com.camlong.homnayangi.application.constants.District;
-import com.camlong.homnayangi.application.domain.models.Location;
+import com.camlong.homnayangi.domain.models.Location;
 import com.camlong.homnayangi.application.location.LocationRepository;
 import com.camlong.homnayangi.outbound.db.LocationJpaRepository;
 import com.camlong.homnayangi.outbound.db.entities.LocationEntity;

@@ -1,6 +1,6 @@
 package com.camlong.homnayangi.outbound.db.mappers;
 
-import com.camlong.homnayangi.application.domain.models.ApplicationRefreshToken;
+import com.camlong.homnayangi.domain.models.ApplicationRefreshToken;
 import com.camlong.homnayangi.outbound.db.entities.RefreshTokenEntity;
 import org.mapstruct.Mapper;
 

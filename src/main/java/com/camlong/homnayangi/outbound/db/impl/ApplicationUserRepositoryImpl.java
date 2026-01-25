@@ -1,6 +1,6 @@
 package com.camlong.homnayangi.outbound.db.impl;
 
-import com.camlong.homnayangi.application.domain.models.ApplicationUser;
+import com.camlong.homnayangi.domain.models.ApplicationUser;
 import com.camlong.homnayangi.application.usermangement.ApplicationUserRepository;
 import com.camlong.homnayangi.outbound.db.ApplicationUserJpaRepository;
 import com.camlong.homnayangi.outbound.db.entities.ApplicationUserEntity;

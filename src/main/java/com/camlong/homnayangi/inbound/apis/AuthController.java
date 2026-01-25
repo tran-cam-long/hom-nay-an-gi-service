@@ -1,7 +1,7 @@
 package com.camlong.homnayangi.inbound.apis;
 
-import com.camlong.homnayangi.application.domain.models.ApplicationUser;
-import com.camlong.homnayangi.application.domain.models.UserRegistration;
+import com.camlong.homnayangi.domain.models.ApplicationUser;
+import com.camlong.homnayangi.domain.models.UserRegistration;
 import com.camlong.homnayangi.application.usermangement.AuthService;
 import com.camlong.homnayangi.inbound.models.requests.AccountRegisterRequest;
 import com.camlong.homnayangi.inbound.models.requests.LoginRequest;

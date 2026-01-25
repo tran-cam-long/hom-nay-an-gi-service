@@ -1,7 +1,7 @@
 package com.camlong.homnayangi.application.location;
 
 import com.camlong.homnayangi.application.constants.District;
-import com.camlong.homnayangi.application.domain.models.Location;
+import com.camlong.homnayangi.domain.models.Location;
 
 import java.util.List;
 import java.util.Optional;

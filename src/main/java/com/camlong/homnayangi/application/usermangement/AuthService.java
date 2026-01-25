@@ -1,7 +1,7 @@
 package com.camlong.homnayangi.application.usermangement;
 
-import com.camlong.homnayangi.application.domain.models.ApplicationUser;
-import com.camlong.homnayangi.application.domain.models.UserRegistration;
+import com.camlong.homnayangi.domain.models.ApplicationUser;
+import com.camlong.homnayangi.domain.models.UserRegistration;
 
 public interface AuthService {
 

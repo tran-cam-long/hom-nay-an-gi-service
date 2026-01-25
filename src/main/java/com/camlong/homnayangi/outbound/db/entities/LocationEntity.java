@@ -1,7 +1,7 @@
 package com.camlong.homnayangi.outbound.db.entities;
 
 import com.camlong.homnayangi.application.constants.District;
-import com.camlong.homnayangi.application.domain.models.DirectorySource;
+import com.camlong.homnayangi.domain.models.DirectorySource;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,6 +1,6 @@
 package com.camlong.homnayangi.outbound.db.mappers;
 
-import com.camlong.homnayangi.application.domain.models.ApplicationUser;
+import com.camlong.homnayangi.domain.models.ApplicationUser;
 import com.camlong.homnayangi.outbound.db.entities.ApplicationUserEntity;
 import org.mapstruct.Mapper;
 

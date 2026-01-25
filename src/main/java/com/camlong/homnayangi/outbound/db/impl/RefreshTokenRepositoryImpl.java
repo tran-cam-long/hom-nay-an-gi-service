@@ -1,6 +1,6 @@
 package com.camlong.homnayangi.outbound.db.impl;
 
-import com.camlong.homnayangi.application.domain.models.ApplicationRefreshToken;
+import com.camlong.homnayangi.domain.models.ApplicationRefreshToken;
 import com.camlong.homnayangi.application.usermangement.RefreshTokenRepository;
 import com.camlong.homnayangi.outbound.db.RefreshTokenJpaRepository;
 import com.camlong.homnayangi.outbound.db.entities.RefreshTokenEntity;

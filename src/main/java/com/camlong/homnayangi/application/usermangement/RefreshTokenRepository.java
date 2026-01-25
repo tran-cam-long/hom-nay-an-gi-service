@@ -1,6 +1,6 @@
 package com.camlong.homnayangi.application.usermangement;
 
-import com.camlong.homnayangi.application.domain.models.ApplicationRefreshToken;
+import com.camlong.homnayangi.domain.models.ApplicationRefreshToken;
 
 import java.util.Optional;
 

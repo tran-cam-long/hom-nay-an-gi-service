@@ -1,8 +1,8 @@
 package com.camlong.homnayangi.application.usermangement.impl;
 
-import com.camlong.homnayangi.application.domain.models.ApplicationRefreshToken;
-import com.camlong.homnayangi.application.domain.models.ApplicationUser;
-import com.camlong.homnayangi.application.domain.models.UserRegistration;
+import com.camlong.homnayangi.domain.models.ApplicationRefreshToken;
+import com.camlong.homnayangi.domain.models.ApplicationUser;
+import com.camlong.homnayangi.domain.models.UserRegistration;
 import com.camlong.homnayangi.application.usermangement.ApplicationUserRepository;
 import com.camlong.homnayangi.application.usermangement.AuthService;
 import com.camlong.homnayangi.application.usermangement.RefreshTokenRepository;

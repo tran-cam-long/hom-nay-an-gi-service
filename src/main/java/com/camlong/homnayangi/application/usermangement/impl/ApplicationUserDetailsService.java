@@ -1,6 +1,6 @@
 package com.camlong.homnayangi.application.usermangement.impl;
 
-import com.camlong.homnayangi.application.domain.models.ApplicationUser;
+import com.camlong.homnayangi.domain.models.ApplicationUser;
 import com.camlong.homnayangi.application.usermangement.ApplicationUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;

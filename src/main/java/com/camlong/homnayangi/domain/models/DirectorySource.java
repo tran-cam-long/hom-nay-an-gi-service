@@ -1,4 +1,4 @@
-package com.camlong.homnayangi.application.domain.models;
+package com.camlong.homnayangi.domain.models;
 
 import lombok.Data;
 
