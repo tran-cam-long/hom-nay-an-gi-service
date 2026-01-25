@@ -1,4 +1,4 @@
-package com.camlong.homnayangi.application.domain.models;
+package com.camlong.homnayangi.inbound.models;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;

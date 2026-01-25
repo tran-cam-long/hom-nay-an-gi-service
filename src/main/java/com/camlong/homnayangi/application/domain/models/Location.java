@@ -32,5 +32,5 @@ public class Location {
 
     private Float credibilityScore;
 
-    private GoogleSource googleSource;
+    private DirectorySource directorySource;
 }

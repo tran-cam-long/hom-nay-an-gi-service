@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 @Data
-public class GoogleSource implements Serializable {
+public class DirectorySource implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
