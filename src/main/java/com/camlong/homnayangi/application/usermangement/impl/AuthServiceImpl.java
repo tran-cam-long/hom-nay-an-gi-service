@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -33,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
 
   private final AuthenticationManager authenticationManager;
   private final JwtUtils jwtUtils;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public ApplicationUser login(String username, String password) {
@@ -73,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
 
     final ApplicationUser user = ApplicationUser.builder()
         .username(registration.getUsername())
-        .password(registration.getPassword())
+        .password(passwordEncoder.encode(registration.getPassword()))
         .role(ROLE_USER.getValue()).build();
     user.initCreatedDomainModel();
 
