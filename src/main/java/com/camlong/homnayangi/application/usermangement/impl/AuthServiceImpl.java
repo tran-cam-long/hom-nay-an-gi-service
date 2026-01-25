@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 
+import static com.camlong.homnayangi.application.constants.ApplicationConstants.Role.ROLE_USER;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -72,7 +74,8 @@ public class AuthServiceImpl implements AuthService {
     final ApplicationUser user = ApplicationUser.builder()
         .username(registration.getUsername())
         .password(registration.getPassword())
-        .role("ROLE_USER").build();
+        .role(ROLE_USER.getValue()).build();
+    user.initCreatedDomainModel();
 
     userRepository.save(user);
   }
