@@ -1,4 +1,4 @@
-package com.camlong.homnayangi.inbound.utils;
+package com.camlong.homnayangi.application.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtUtils {
@@ -28,9 +29,10 @@ public class JwtUtils {
     return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
   }
 
-  public String generateToken(String username) {
+  public String generateToken(String username, List<String> roles) {
     return Jwts.builder()
         .setSubject(username)
+        .claim("roles", roles)
         .setIssuedAt(new Date())
         .setExpiration(new Date(System.currentTimeMillis() + expiration))
         .signWith(getSigningKey(), SignatureAlgorithm.HS256)

@@ -26,7 +26,7 @@ public class DishChoiceEntity implements Serializable {
 
     @Column
     @ManyToOne
-    private UserDetailsEntity user;
+    private ApplicationUserEntity user;
 
     @Column
     private Date chosenDate;

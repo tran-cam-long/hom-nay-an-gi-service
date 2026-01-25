@@ -3,8 +3,12 @@ spring:
     name: homnayangi-service
 
 server:
-  port: 8080
+  port: 8100
   servlet:
     context-path: /homnayangi-service
+
+jwt:
+  expiration: 3600000
+  refresh-expiration: 36000000
 
 

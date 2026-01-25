@@ -3,13 +3,13 @@ package com.camlong.homnayangi.outbound.db.entities;
 import com.camlong.homnayangi.application.constants.District;
 import com.camlong.homnayangi.application.domain.models.DirectorySource;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.geo.Point;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,6 +17,7 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Entity
 @Table(name = "location")
 public class LocationEntity extends BaseEntity implements Serializable {
 
@@ -45,8 +46,8 @@ public class LocationEntity extends BaseEntity implements Serializable {
     @Column
     private String openingHours;
 
-    @Column(columnDefinition = "geography(Point,4326)")
-    private Point coordinate;
+//    @Column(columnDefinition = "geography(Point,4326)")
+//    private Point coordinate;
 
     @Column
     private Float maxPrice;

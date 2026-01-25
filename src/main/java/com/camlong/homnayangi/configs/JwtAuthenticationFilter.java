@@ -1,6 +1,6 @@
 package com.camlong.homnayangi.configs;
 
-import com.camlong.homnayangi.inbound.utils.JwtUtils;
+import com.camlong.homnayangi.application.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

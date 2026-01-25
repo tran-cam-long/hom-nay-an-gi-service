@@ -25,6 +25,7 @@ configurations {
 	}
 }
 
+
 repositories {
 	mavenCentral()
 }
@@ -68,7 +69,9 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()

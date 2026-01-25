@@ -5,5 +5,5 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface InboundLocationMapper {
-    DirectorySource toDirectorySource(GoogleMapsRecord googleMapsRecord);
+//    DirectorySource toDirectorySource(GoogleMapsRecord googleMapsRecord);
 }

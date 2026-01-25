@@ -4,7 +4,7 @@ import com.camlong.homnayangi.application.domain.models.ApplicationRefreshToken;
 import com.camlong.homnayangi.outbound.db.entities.RefreshTokenEntity;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CommonJpaMapper {
 
   ApplicationRefreshToken toApplicationRefreshToken(final RefreshTokenEntity entity);

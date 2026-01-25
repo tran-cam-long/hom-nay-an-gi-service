@@ -1,11 +1,13 @@
 package com.camlong.homnayangi.application.domain.models;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 @Data
+@Builder
 public class ApplicationUser implements Serializable  {
 
     @Serial
@@ -16,4 +18,7 @@ public class ApplicationUser implements Serializable  {
     private String password;
 
     private String role;
+
+    private String accessToken;
+    private String refreshToken;
 }
