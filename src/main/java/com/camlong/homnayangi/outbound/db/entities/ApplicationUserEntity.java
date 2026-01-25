@@ -15,7 +15,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Table(name = "user_details")
-public class UserDetailsEntity extends BaseEntity implements Serializable {
+public class ApplicationUserEntity extends BaseEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -32,6 +32,9 @@ public class UserDetailsEntity extends BaseEntity implements Serializable {
 
     @Column
     private String password;
+
+    @Column
+    private String role;
 
     @Column
     private List<String> dishExclusions;
