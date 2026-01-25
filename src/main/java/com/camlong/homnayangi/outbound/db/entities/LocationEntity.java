@@ -1,8 +1,12 @@
 package com.camlong.homnayangi.outbound.db.entities;
 
 import com.camlong.homnayangi.application.constants.District;
-import com.camlong.homnayangi.application.domain.models.GoogleSource;
-import jakarta.persistence.*;
+import com.camlong.homnayangi.application.domain.models.DirectorySource;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.geo.Point;
@@ -22,6 +26,9 @@ public class LocationEntity extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
+    private String placeId;
 
     @Column
     private String name;
@@ -57,7 +64,7 @@ public class LocationEntity extends BaseEntity implements Serializable {
     private Float credibilityScore;
 
     @Column(columnDefinition = "jsonb")
-    private GoogleSource googleSource;
+    private DirectorySource directorySource;
 
 
 }
