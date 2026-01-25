@@ -18,8 +18,14 @@ public class ApplicationUserRepositoryImpl implements ApplicationUserRepository 
     private final ApplicationUserJpaMapper mapper;
 
     @Override
-    public Optional<ApplicationUser> findById(Long id) {
+    public Optional<ApplicationUser> findById(final Long id) {
         final Optional<ApplicationUserEntity> entity = jpaRepository.findById(id);
+        return entity.map(mapper::toApplicationUser);
+    }
+
+    @Override
+    public Optional<ApplicationUser> findByUsername(final String username) {
+        final Optional<ApplicationUserEntity> entity = jpaRepository.findByUsername(username);
         return entity.map(mapper::toApplicationUser);
     }
 
