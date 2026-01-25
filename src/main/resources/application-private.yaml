@@ -13,7 +13,7 @@ spring:
     properties:
       hibernate:
         hbm2ddl:
-          auto: create
+          auto: update
   security:
     user:
       name: admin

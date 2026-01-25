@@ -26,9 +26,10 @@ public class CuisineDishRepositoryImpl implements CuisineDishRepository {
   }
 
   @Override
-  public void save(final CuisineDish cuisineDish) {
+  public CuisineDish save(final CuisineDish cuisineDish) {
     final CuisineDishEntity entity = mapper.toEntity(cuisineDish);
-    jpaRepository.save(entity);
+    final CuisineDishEntity saved = jpaRepository.save(entity);
+    return mapper.toCuisineDish(saved);
   }
 
   @Override

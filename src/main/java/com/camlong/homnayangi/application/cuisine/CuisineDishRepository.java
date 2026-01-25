@@ -10,7 +10,7 @@ public interface CuisineDishRepository {
 
   Optional<CuisineDish> findById(Long id);
 
-  void save(CuisineDish cuisineDish);
+  CuisineDish save(CuisineDish cuisineDish);
 
   List<CuisineDish> findAll();
 

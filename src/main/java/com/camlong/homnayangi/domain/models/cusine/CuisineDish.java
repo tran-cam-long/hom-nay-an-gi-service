@@ -1,14 +1,22 @@
 package com.camlong.homnayangi.domain.models.cusine;
 
 import com.camlong.homnayangi.domain.models.DomainAuditor;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
-@Data
 public class CuisineDish extends DomainAuditor implements Serializable {
 
   @Serial

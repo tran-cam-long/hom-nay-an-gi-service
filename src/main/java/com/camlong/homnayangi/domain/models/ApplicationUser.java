@@ -1,15 +1,21 @@
 package com.camlong.homnayangi.domain.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
-@Data
-@Builder
 public class ApplicationUser extends DomainAuditor implements Serializable  {
 
     @Serial
