@@ -5,6 +5,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Component
 public class JwtUtils {
 
@@ -51,7 +53,7 @@ public class JwtUtils {
   public Claims extractClaims(String token) {
     return Jwts.parserBuilder()
         .setSigningKey(getSigningKey())
-        .build().parseClaimsJwt(token).getBody();
+        .build().parseClaimsJws(token).getBody();
   }
 
   public boolean isTokenValid(String token) {
@@ -59,6 +61,7 @@ public class JwtUtils {
       extractClaims(token).getSubject();
       return true;
     } catch (JwtException | IllegalArgumentException e) {
+      log.error("[JwtFilter] encountered exception: {}", e.getMessage());
       return false;
     }
   }
