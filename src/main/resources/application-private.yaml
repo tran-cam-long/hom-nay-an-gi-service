@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    host: 192.168.1.12
+    port: 5432
+    dbname: homnayangi_db
+    url: jdbc:postgresql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.dbname}
+    username: postgres
+    password: postgres
+  liquibase:
+    change-log: classpath:db/liquibase-changelog-test.xml
+    enabled: false
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+  security:
+    user:
+      name: admin
+      password: admin
+
+jwt:
+  secret: cqManIGq8R3i52nC8rL2wBEqBYuacxQ8pd14OTh5fLu
+

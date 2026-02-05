@@ -1,7 +1,12 @@
+import java.time.Duration
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.0.1'
 	id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.github.spotbugs' version '6.0.1'
+    id 'com.avast.gradle.docker-compose' version '0.16.13'
+    id 'org.openapi.generator' version '7.3.0'
 }
 
 group = 'com.camlong'
@@ -24,16 +29,27 @@ repositories {
 	mavenCentral()
 }
 
+def mapstructVersion = "1.5.5.Final"
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-flyway'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	// Add the validation starter (brings Hibernate Validator for Jakarta Validation API)
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.flywaydb:flyway-database-postgresql'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    implementation 'com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter:0.8.1'
+
+    implementation 'org.hibernate.orm:hibernate-spatial:7.2.1.Final'
+    implementation 'org.locationtech.jts:jts-core:1.15.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
+	testRuntimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
@@ -42,8 +58,63 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// Jackson CSV and databind for CSV parsing
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.15.2'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+dockerCompose {
+    useComposeFiles = [file('cd/docker/docker-compose-local.yml')] as Iterable<? extends String>
+    removeOrphans = true
+    waitForHealthyStateTimeout = Duration.ofMinutes(1)
+}
+
+tasks.register('startTestEnvironment') {
+    dependsOn 'composeUp'
+}
+
+tasks.register('stopTestEnvironment') {
+    dependsOn 'composeDown'
+}
+
+tasks.register('startApp') {
+    dependsOn tasks.named('startTestEnvironment')
+}
+
+spotbugs {
+    toolVersion = '4.8.3'
+    ignoreFailures = false
+    showStackTraces = true
+    excludeFilter = file('config/spotbugs/excludeFilter.xml')
+}
+
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$rootDir/src/main/resources/openapi.yaml"
+    outputDir = "$buildDir/generated"
+    apiPackage = "com.camlong.homnayangi.inbound.apis"
+    modelPackage = "com.camlong.homnayangi.inbound.models"
+//    invokerPackage = "com.camlong.invoker"
+
+    configOptions = [
+            interfaceOnly      : "true",
+            useSpringBoot3     : "true",
+            dateLibrary        : "java8",
+            useTags            : "true",
+            openApiNullable    : "false",
+            serializationLibrary: "jackson"
+    ]
 }
