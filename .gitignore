@@ -26,8 +26,11 @@ replay_pid*
 # gradle
 .gradle
 
-# idea
-.idea
+# IDE project files
+*.iml
+*.ipr
+*.iws
+.idea/
 
 # Build
 build
