@@ -3,13 +3,13 @@ package com.camlong.homnayangi.service.impl;
 import com.camlong.homnayangi.entity.CuisineDish;
 import com.camlong.homnayangi.repository.CuisineDishRepository;
 import com.camlong.homnayangi.service.CuisineDishService;
+import com.camlong.homnayangi.utils.JsonNodeUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 @Slf4j
 @Service
@@ -38,22 +38,12 @@ public class CuisineDishServiceImpl implements CuisineDishService {
   public void patchDish(Long id, JsonNode request) {
     final CuisineDish existingDish = repository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
 
-    applyTextField(request, "name", existingDish::setName);
-    applyTextField(request, "type", existingDish::setType);
-    applyTextField(request, "culture", existingDish::setCulture);
-    applyTextField(request, "imageUrl", existingDish::setImageUrl);
+    JsonNodeUtils.applyTextField(request, "name", existingDish::setName);
+    JsonNodeUtils.applyTextField(request, "type", existingDish::setType);
+    JsonNodeUtils.applyTextField(request, "culture", existingDish::setCulture);
+    JsonNodeUtils.applyTextField(request, "imageUrl", existingDish::setImageUrl);
 
     repository.save(existingDish);
-  }
-
-  private void applyTextField(JsonNode node, String field, Consumer<String> setter) {
-    if (node == null || !node.has(field)) return;
-    com.fasterxml.jackson.databind.JsonNode valueNode = node.get(field);
-    if (valueNode == null || valueNode.isNull()) return;
-    String value = valueNode.asText("");
-    if (!value.isBlank()) {
-      setter.accept(value.trim());
-    }
   }
 
 }

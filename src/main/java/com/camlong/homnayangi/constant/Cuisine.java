@@ -1,4 +1,4 @@
-package com.camlong.homnayangi.application.constants;
+package com.camlong.homnayangi.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
