@@ -26,6 +26,9 @@ replay_pid*
 # gradle
 .gradle
 
+# idea
+.idea
+
 # Build
 build
 generated
