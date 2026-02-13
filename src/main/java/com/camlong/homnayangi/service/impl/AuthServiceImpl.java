@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -59,10 +60,16 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
+  @Transactional
   public void logout(String refreshToken) {
     final RefreshToken token = verifyRefreshToken(refreshToken);
 
-    refreshTokenRepository.deleteByToken(refreshToken);
+    try {
+      refreshTokenRepository.deleteByToken(refreshToken);
+    } catch (Exception e) {
+      log.error("Error: {}", e.getMessage());
+    }
+
     log.info("[Logout] User logged out: {}", token.getUsername());
   }
 
