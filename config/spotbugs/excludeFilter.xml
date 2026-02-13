@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<FindBugsFilter>
+    <Match>
+        <Or>
+            <Bug pattern="EI_EXPOSE_REP"/>
+            <Bug pattern="EI_EXPOSE_REP2"/>
+        </Or>
+    </Match>
+
+    <Match>
+        <Or>
+            <Package name="com.camlong.homnayangi.entity" />
+            <Package name="com.camlong.homnayangi.dto" />
+        </Or>
+    </Match>
+</FindBugsFilter>

@@ -1,5 +1,6 @@
 package com.camlong.homnayangi.service.impl;
 
+import com.camlong.homnayangi.config.exception.BusinessException;
 import com.camlong.homnayangi.dto.AuthResponse;
 import com.camlong.homnayangi.service.AuthService;
 import com.camlong.homnayangi.config.auth.JwtUtils;
@@ -53,7 +54,16 @@ public class AuthServiceImpl implements AuthService {
     createRefreshToken(username, refreshToken);
     log.info("[Login]: Username {} has logged in.", username);
 
-    return new AuthResponse(accessToken, refreshToken);
+    final Long userId = appUser.getId();
+    return new AuthResponse(userId, username, accessToken, refreshToken);
+  }
+
+  @Override
+  public void logout(String refreshToken) {
+    final RefreshToken token = verifyRefreshToken(refreshToken);
+
+    refreshTokenRepository.deleteByToken(refreshToken);
+    log.info("[Logout] User logged out: {}", token.getUsername());
   }
 
   @Override
@@ -63,13 +73,13 @@ public class AuthServiceImpl implements AuthService {
 
     final String newAccessToken = jwtUtils.generateToken(appUser.getUsername(), List.of(appUser.getRole()));
 
-    return new AuthResponse(newAccessToken, refreshToken);
+    return new AuthResponse(null, null, newAccessToken, refreshToken);
   }
 
   @Override
   public void register(AccountRegisterRequest registration) {
     if (applicationUserRepository.findByUsername(registration.username()).isPresent()) {
-      throw new RuntimeException("Existing username");
+      throw new BusinessException("Existing username");
     }
 
     final ApplicationUser user = ApplicationUser.builder()

@@ -44,7 +44,7 @@ class AuthControllerTest {
   @Test
   void givenValidLoginRequest_whenLogin_thenSucceed() {
     final LoginRequest request = new LoginRequest("john_doe", "123456");
-    final AuthResponse response = new AuthResponse(SAMPLE_ACCESS_TOKEN, SAMPLE_REFRESH_TOKEN);
+    final AuthResponse response = new AuthResponse(1L, "john_doe", SAMPLE_ACCESS_TOKEN, SAMPLE_REFRESH_TOKEN);
 
     when(authService.login(request.username(), request.password())).thenReturn(response);
 
@@ -83,7 +83,7 @@ class AuthControllerTest {
 
   @Test
   void givenValidRefreshToken_whenRefreshToken_thenSucceed() {
-    final AuthResponse response = new AuthResponse(SAMPLE_ACCESS_TOKEN, SAMPLE_REFRESH_TOKEN);
+    final AuthResponse response = new AuthResponse(null, null, SAMPLE_ACCESS_TOKEN, SAMPLE_REFRESH_TOKEN);
 
     when(authService.refreshToken(SAMPLE_REFRESH_TOKEN)).thenReturn(response);
 
