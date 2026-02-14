@@ -45,7 +45,7 @@ public class CuisineDish extends BaseEntity implements Serializable {
     @Column
     private String culture;
 
-    @Column
+    @Column(length = 800)
     private String imageUrl;
 
 }

@@ -4,9 +4,6 @@ package unit.com.camlong.homnayangi.service.impl;
 import com.camlong.homnayangi.entity.CuisineDish;
 import com.camlong.homnayangi.repository.CuisineDishRepository;
 import com.camlong.homnayangi.service.impl.CuisineDishServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -16,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.camlong.homnayangi.constant.Cuisine.BEEF_PHO;
@@ -34,8 +32,6 @@ class CuisineDishServiceImplTest {
 
   @Mock
   private CuisineDishRepository repository;
-
-  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Test
   void givenExistingCuisine_whenFindById_thenReturn() {
@@ -68,15 +64,19 @@ class CuisineDishServiceImplTest {
   }
 
   @Test
-  void givenExistingCuisine_whenPatchDish_thenSucceed() throws JsonProcessingException {
+  void givenExistingCuisine_whenPatchDish_thenSucceed() {
     final Long id = 3L;
     final CuisineDish record = CuisineDish.builder().id(id)
         .name(HU_TIEU.getValue())
         .culture("Chinese").imageUrl(null)
         .searchKeyword("Hủ tíu")
         .type("sample").build();
-    final String jsonString = "{ \"name\": \"Another name\", \"type\": \"Another type\", \"culture\": \"Another culture\", \"imageUrl\": \"https://conmeo.img\" }";
-    final JsonNode request = objectMapper.readTree(jsonString);
+    final Map<String, Object> request = Map.of(
+        "name", "Another name",
+        "type", "Another type",
+        "culture", "Another culture",
+        "imageUrl", "https://conmeo.img"
+    );
     final ArgumentCaptor<CuisineDish> captor = ArgumentCaptor.forClass(CuisineDish.class);
 
     when(repository.findById(id)).thenReturn(Optional.of(record));

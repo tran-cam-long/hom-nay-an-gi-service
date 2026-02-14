@@ -3,7 +3,6 @@ package com.camlong.homnayangi.controller;
 import com.camlong.homnayangi.dto.CreateCuisineDishRequest;
 import com.camlong.homnayangi.entity.CuisineDish;
 import com.camlong.homnayangi.service.CuisineDishService;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Map;
 
 import static com.camlong.homnayangi.constant.ApplicationConstants.ROLE_ADMIN;
 
@@ -50,7 +51,7 @@ public class CuisineDishController {
   @PatchMapping("/{id}")
   public ResponseEntity<@NonNull Void> patchDish(
       @PathVariable Long id,
-      @RequestBody JsonNode request) {
+      @RequestBody Map<String, Object> request) {
 
     cuisineDishService.patchDish(id, request);
 

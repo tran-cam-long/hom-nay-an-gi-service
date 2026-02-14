@@ -4,12 +4,12 @@ import com.camlong.homnayangi.entity.CuisineDish;
 import com.camlong.homnayangi.repository.CuisineDishRepository;
 import com.camlong.homnayangi.service.CuisineDishService;
 import com.camlong.homnayangi.utils.JsonNodeUtils;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -35,7 +35,7 @@ public class CuisineDishServiceImpl implements CuisineDishService {
   }
 
   @Override
-  public void patchDish(Long id, JsonNode request) {
+  public void patchDish(Long id, Map<String, Object> request) {
     final CuisineDish existingDish = repository.findById(id).orElseThrow(() -> new RuntimeException("Dish not found"));
 
     JsonNodeUtils.applyTextField(request, "name", existingDish::setName);
