@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.camlong.homnayangi.constant.ApplicationConstants.ROLE_ADMIN;
@@ -56,5 +58,10 @@ public class CuisineDishController {
     cuisineDishService.patchDish(id, request);
 
     return ResponseEntity.ok(null);
+  }
+
+  @GetMapping
+  public ResponseEntity<List<CuisineDish>> getAll() {
+    return ResponseEntity.ok(cuisineDishService.findAll());
   }
 }
