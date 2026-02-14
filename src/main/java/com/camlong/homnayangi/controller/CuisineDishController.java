@@ -28,7 +28,7 @@ public class CuisineDishController {
   private final CuisineDishService cuisineDishService;
 
   @GetMapping("/{id}")
-  public ResponseEntity<@NonNull CuisineDish> findById(@PathVariable("id") Long id) {
+  public ResponseEntity<@NonNull CuisineDish> findById(@PathVariable Long id) {
     final CuisineDish cuisineDish = cuisineDishService.findById(id);
     return ResponseEntity.ok(cuisineDish);
   }
@@ -47,7 +47,7 @@ public class CuisineDishController {
     return ResponseEntity.status(HttpStatus.CREATED).body(saved);
   }
 
-  @PatchMapping
+  @PatchMapping("/{id}")
   public ResponseEntity<@NonNull Void> patchDish(
       @PathVariable Long id,
       @RequestBody JsonNode request) {
