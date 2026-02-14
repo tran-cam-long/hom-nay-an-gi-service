@@ -28,8 +28,8 @@ public class DishRotationServiceImpl implements DishRotationService {
     }
 
     @Override
-    public void recordChoice(Long userId, Long dishId) {
-        final ApplicationUser user = applicationUserRepository.findById(userId)
+    public void recordChoice(String username, Long dishId) {
+        final ApplicationUser user = applicationUserRepository.findByUsername(username)
                 .orElseThrow(() -> new BusinessException("User was not found"));
         final CuisineDish dish = cuisineDishRepository.findById(dishId)
                 .orElseThrow(() -> new BusinessException("Dish was not found"));

@@ -35,10 +35,10 @@ public class DishChoice extends BaseEntity implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "dish_id", referencedColumnName = "id")
+    @JoinColumn(name = "dish_id")
     private CuisineDish dish;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id")
     private ApplicationUser user;
 }

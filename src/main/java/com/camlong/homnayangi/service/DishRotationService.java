@@ -6,5 +6,5 @@ import com.camlong.homnayangi.entity.CuisineDish;
 public interface DishRotationService {
     void recordChoice(ApplicationUser currentUser, CuisineDish dish);
 
-    void recordChoice(Long userId, Long dishId);
+    void recordChoice(String username, Long dishId);
 }
