@@ -7,6 +7,8 @@ public interface AuthService {
 
   AuthResponse login(String username, String password);
 
+  void logout(String refreshToken);
+
   AuthResponse refreshToken(String refreshToken);
 
   void register(AccountRegisterRequest registration);

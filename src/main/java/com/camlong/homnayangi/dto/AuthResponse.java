@@ -1,4 +1,4 @@
 package com.camlong.homnayangi.dto;
 
-public record AuthResponse(String token, String refreshToken) {
+public record AuthResponse(Long userId, String username, String token, String refreshToken) {
 }

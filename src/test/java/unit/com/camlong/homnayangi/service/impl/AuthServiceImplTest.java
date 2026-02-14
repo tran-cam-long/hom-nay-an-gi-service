@@ -149,7 +149,7 @@ class AuthServiceImplTest {
     final String username = "john_doe";
     final RefreshToken refreshTokenEntity = RefreshToken.builder()
         .username(username).token(refreshToken).expiryTime(Instant.now().minusSeconds(7200)).build();
-    final ApplicationUser user = ApplicationUser.builder().username(username).role(ROLE_USER).build();
+    ApplicationUser.builder().username(username).role(ROLE_USER).build();
 
     when(refreshTokenRepository.findByToken(refreshToken)).thenReturn(Optional.of(refreshTokenEntity));
 

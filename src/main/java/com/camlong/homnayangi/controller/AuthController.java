@@ -1,6 +1,7 @@
 package com.camlong.homnayangi.controller;
 
 
+import com.camlong.homnayangi.dto.LogoutRequest;
 import com.camlong.homnayangi.service.AuthService;
 import com.camlong.homnayangi.dto.AccountRegisterRequest;
 import com.camlong.homnayangi.dto.LoginRequest;
@@ -29,6 +30,12 @@ public class AuthController {
   public ResponseEntity<@NonNull AuthResponse> login(@RequestBody @Valid LoginRequest request) {
     final AuthResponse authResponse = authService.login(request.username(), request.password());
     return ResponseEntity.ok(authResponse);
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<Void> logout(@RequestBody @Valid LogoutRequest request) {
+    authService.logout(request.refreshToken());
+    return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/refresh")

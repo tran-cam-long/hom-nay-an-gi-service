@@ -1,0 +1,22 @@
+services:
+  hom-nay-an-gi-service:
+    image: camlongtran/hom-nay-an-gi-service:latest
+    container_name: hom-nay-an-gi-service
+    restart: unless-stopped
+    ports:
+      - "${SERVER_IP}:8100:8100"
+    environment:
+      SERVER_PORT: "8100"
+      SPRING_PROFILES_ACTIVE: "private"
+      SPRING_DATASOURCE_HOST: "${SERVER_IP}"
+      SPRING_DATASOURCE_PORT: "5432"
+      SPRING_DATASOURCE_DBNAME: "${POSTGRES_DB}"
+      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER}"
+      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD}"
+      JWT_SECRET: "${JWT_SECRET}"
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    driver: bridge

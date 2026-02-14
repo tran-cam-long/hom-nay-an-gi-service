@@ -30,7 +30,7 @@ replay_pid*
 *.iml
 *.ipr
 *.iws
-.idea/
+*.idea
 
 # Build
 build
