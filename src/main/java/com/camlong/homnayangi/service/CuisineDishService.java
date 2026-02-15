@@ -1,9 +1,9 @@
 package com.camlong.homnayangi.service;
 
 import com.camlong.homnayangi.entity.CuisineDish;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CuisineDishService {
 
@@ -13,5 +13,5 @@ public interface CuisineDishService {
 
   List<CuisineDish> findAll();
 
-  void patchDish(Long id, JsonNode cuisineDish);
+  void patchDish(Long id, Map<String, Object> cuisineDish);
 }

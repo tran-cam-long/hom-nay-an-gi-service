@@ -3,7 +3,6 @@ package com.camlong.homnayangi.controller;
 import com.camlong.homnayangi.dto.CreateCuisineDishRequest;
 import com.camlong.homnayangi.entity.CuisineDish;
 import com.camlong.homnayangi.service.CuisineDishService;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,12 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+import java.util.Map;
+
 import static com.camlong.homnayangi.constant.ApplicationConstants.ROLE_ADMIN;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/cuisine/dishes")
-@PreAuthorize(ROLE_ADMIN)
 public class CuisineDishController {
 
   private final CuisineDishService cuisineDishService;
@@ -33,6 +34,7 @@ public class CuisineDishController {
     return ResponseEntity.ok(cuisineDish);
   }
 
+  @PreAuthorize(ROLE_ADMIN)
   @PostMapping
   public ResponseEntity<@NonNull CuisineDish> save(@RequestBody CreateCuisineDishRequest request) {
     final CuisineDish toCreate = CuisineDish.builder()
@@ -47,13 +49,19 @@ public class CuisineDishController {
     return ResponseEntity.status(HttpStatus.CREATED).body(saved);
   }
 
+  @PreAuthorize(ROLE_ADMIN)
   @PatchMapping("/{id}")
   public ResponseEntity<@NonNull Void> patchDish(
       @PathVariable Long id,
-      @RequestBody JsonNode request) {
+      @RequestBody Map<String, Object> request) {
 
     cuisineDishService.patchDish(id, request);
 
     return ResponseEntity.ok(null);
+  }
+
+  @GetMapping
+  public ResponseEntity<List<CuisineDish>> getAll() {
+    return ResponseEntity.ok(cuisineDishService.findAll());
   }
 }
