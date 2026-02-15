@@ -3,6 +3,7 @@ package com.camlong.homnayangi.service.impl;
 import com.camlong.homnayangi.config.exception.BusinessException;
 import com.camlong.homnayangi.dto.DishChoiceCount;
 import com.camlong.homnayangi.dto.DishChoiceRecommendation;
+import com.camlong.homnayangi.dto.DishChoiceRecommendationItem;
 import com.camlong.homnayangi.entity.ApplicationUser;
 import com.camlong.homnayangi.entity.CuisineDish;
 import com.camlong.homnayangi.entity.DishChoice;
@@ -14,11 +15,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -50,76 +52,70 @@ public class DishRotationServiceImpl implements DishRotationService {
         final ApplicationUser user = applicationUserRepository.findByUsername(username)
                 .orElseThrow(() -> new BusinessException("User was not found"));
         final List<CuisineDish> allDishes = cuisineDishRepository.findAll();
-        final Map<Long, Long> choiceCountByDishId = dishChoiceRepository.findChoiceCountByUserId(user.getId()).stream()
-                .collect(Collectors.toMap(DishChoiceCount::dishId, DishChoiceCount::choiceCount));
+        final Map<Long, DishChoiceCount> statsByDishId = dishChoiceRepository.findChoiceCountByUserId(user.getId()).stream()
+                .collect(Collectors.toMap(DishChoiceCount::dishId, item -> item));
 
-        final List<DishWithCount> dishesWithCount = allDishes.stream()
-                .map(dish -> new DishWithCount(dish, choiceCountByDishId.getOrDefault(dish.getId(), 0L)))
+        final List<DishWithStats> dishesWithStats = allDishes.stream()
+                .map(dish -> {
+                    final DishChoiceCount stat = statsByDishId.get(dish.getId());
+                    return stat == null
+                            ? new DishWithStats(dish, 0L, null)
+                            : new DishWithStats(dish, stat.choiceCount(), stat.lastChosenTime());
+                })
                 .toList();
 
-        final Comparator<DishWithCount> byMostChosen = Comparator.comparingLong(DishWithCount::count)
+        final Comparator<DishWithStats> byMostChosen = Comparator.comparingLong(DishWithStats::count)
                 .reversed()
                 .thenComparing(item -> item.dish().getId());
-        final Comparator<DishWithCount> byLeastChosen = Comparator.comparingLong(DishWithCount::count)
+        final Comparator<DishWithStats> byLeastChosen = Comparator.comparingLong(DishWithStats::count)
                 .thenComparing(item -> item.dish().getId());
 
-        final List<DishWithCount> mostChosen = dishesWithCount.stream()
-                .sorted(byMostChosen)
+        final List<DishWithStats> chosenDishes = dishesWithStats.stream()
+                .filter(item -> item.count() > 0)
                 .toList();
-        final List<DishWithCount> leastChosen = dishesWithCount.stream()
+        final List<DishWithStats> unchosenDishes = dishesWithStats.stream()
+                .filter(item -> item.count() == 0)
                 .sorted(byLeastChosen)
                 .toList();
 
-        final List<CuisineDish> userFavorites = mostChosen.stream()
-                .limit(10)
-                .map(DishWithCount::dish)
+        final List<DishWithStats> mostChosen = chosenDishes.stream()
+                .sorted(byMostChosen)
+                .toList();
+        final List<DishWithStats> leastChosen = chosenDishes.stream()
+                .sorted(byLeastChosen)
                 .toList();
 
-        final List<DishWithCount> top15 = mostChosen.stream()
+        final Set<Long> selectedDishIds = new HashSet<>();
+        final List<DishChoiceRecommendationItem> userFavorites = mostChosen.stream()
+                .limit(10)
+                .filter(item -> selectedDishIds.add(item.dish().getId()))
+                .map(this::toRecommendationItem)
+                .toList();
+
+        final List<DishWithStats> top15 = mostChosen.stream()
                 .limit(15)
                 .toList();
         final int leastOftenStartIndex = Math.max(0, top15.size() - 5);
-        final List<CuisineDish> userLeastOftenInTop = top15.subList(leastOftenStartIndex, top15.size()).stream()
-                .map(DishWithCount::dish)
+        final List<DishChoiceRecommendationItem> userLeastOftenInTop = top15.subList(leastOftenStartIndex, top15.size()).stream()
+                .filter(item -> selectedDishIds.add(item.dish().getId()))
+                .map(this::toRecommendationItem)
                 .toList();
 
-        final List<CuisineDish> userDiscovery = getUserDiscovery(leastChosen);
+        final List<DishWithStats> remainingForDiscovery = unchosenDishes.stream()
+                .filter(item -> !selectedDishIds.contains(item.dish().getId()))
+                .toList();
+        final List<DishChoiceRecommendationItem> userDiscovery = remainingForDiscovery.stream()
+                .map(this::toRecommendationItem)
+                .toList();
 
         return new DishChoiceRecommendation(userFavorites, userDiscovery, userLeastOftenInTop);
     }
 
-    private List<CuisineDish> getUserDiscovery(List<DishWithCount> leastChosen) {
-        if (leastChosen.size() <= 10) {
-            return leastChosen.stream()
-                    .map(DishWithCount::dish)
-                    .toList();
-        }
-
-        final long cutoffCount = leastChosen.get(9).count();
-        final List<DishWithCount> belowCutoff = leastChosen.stream()
-                .filter(item -> item.count() < cutoffCount)
-                .toList();
-        final int remainingSlot = 10 - belowCutoff.size();
-
-        if (remainingSlot <= 0) {
-            return belowCutoff.stream()
-                    .limit(10)
-                    .map(DishWithCount::dish)
-                    .toList();
-        }
-
-        final List<DishWithCount> boundaryItems = new ArrayList<>(leastChosen.stream()
-                .filter(item -> item.count() == cutoffCount)
-                .toList());
-        Collections.shuffle(boundaryItems);
-
-        final List<CuisineDish> result = new ArrayList<>();
-        result.addAll(belowCutoff.stream().map(DishWithCount::dish).toList());
-        result.addAll(boundaryItems.stream().limit(remainingSlot).map(DishWithCount::dish).toList());
-        return result;
+    private DishChoiceRecommendationItem toRecommendationItem(DishWithStats item) {
+        return new DishChoiceRecommendationItem(item.dish(), item.count(), item.lastChosenTime());
     }
 
-    private record DishWithCount(CuisineDish dish, long count) {
+    private record DishWithStats(CuisineDish dish, long count, Instant lastChosenTime) {
     }
 
 }

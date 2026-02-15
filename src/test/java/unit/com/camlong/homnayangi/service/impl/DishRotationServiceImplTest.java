@@ -2,6 +2,7 @@ package unit.com.camlong.homnayangi.service.impl;
 
 import com.camlong.homnayangi.dto.DishChoiceCount;
 import com.camlong.homnayangi.dto.DishChoiceRecommendation;
+import com.camlong.homnayangi.dto.DishChoiceRecommendationItem;
 import com.camlong.homnayangi.entity.ApplicationUser;
 import com.camlong.homnayangi.entity.CuisineDish;
 import com.camlong.homnayangi.repository.ApplicationUserRepository;
@@ -18,11 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -66,13 +68,15 @@ class DishRotationServiceImplTest {
         final DishChoiceRecommendation result = dishRotationService.getRecommendations(username);
 
         assertEquals(List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L), extractDishIds(result.userFavorites()));
+        assertEquals(30L, result.userFavorites().get(0).timesChosen());
+        assertNotNull(result.userFavorites().get(0).lastChosenTime());
     }
 
     @Test
-    void getRecommendations_shouldReturnDiscoveryWithRandomSelectionOnBoundaryTie() {
+    void getRecommendations_shouldReturnUnchosenDishesInDiscoveryOnly() {
         final String username = "user-b";
         final ApplicationUser user = buildUser(2L, username);
-        final List<CuisineDish> allDishes = buildDishes(15);
+        final List<CuisineDish> allDishes = buildDishes(30);
         final Map<Long, Long> counts = Map.ofEntries(
                 Map.entry(1L, 0L),
                 Map.entry(2L, 0L),
@@ -88,7 +92,22 @@ class DishRotationServiceImplTest {
                 Map.entry(12L, 1L),
                 Map.entry(13L, 2L),
                 Map.entry(14L, 3L),
-                Map.entry(15L, 4L)
+                Map.entry(15L, 4L),
+                Map.entry(16L, 5L),
+                Map.entry(17L, 6L),
+                Map.entry(18L, 7L),
+                Map.entry(19L, 8L),
+                Map.entry(20L, 9L),
+                Map.entry(21L, 10L),
+                Map.entry(22L, 11L),
+                Map.entry(23L, 12L),
+                Map.entry(24L, 13L),
+                Map.entry(25L, 14L),
+                Map.entry(26L, 15L),
+                Map.entry(27L, 16L),
+                Map.entry(28L, 17L),
+                Map.entry(29L, 18L),
+                Map.entry(30L, 19L)
         );
 
         mockCommonDependencies(user, allDishes, toChoiceCounts(counts));
@@ -102,11 +121,12 @@ class DishRotationServiceImplTest {
                 .filter(id -> counts.get(id) == 1L)
                 .toList();
 
-        assertEquals(10, discoveryDishIds.size());
+        assertEquals(3, discoveryDishIds.size());
         assertEquals(3, zeroCountIds.size());
-        assertEquals(7, oneCountIds.size());
+        assertEquals(0, oneCountIds.size());
         assertTrue(discoveryDishIds.containsAll(List.of(1L, 2L, 3L)));
-        assertTrue(Set.of(4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 12L).containsAll(oneCountIds));
+        assertTrue(extractDishIds(result.userFavorites()).stream().noneMatch(discoveryDishIds::contains));
+        assertTrue(extractDishIds(result.userLeastOftenInTop()).stream().noneMatch(discoveryDishIds::contains));
     }
 
     @Test
@@ -115,7 +135,7 @@ class DishRotationServiceImplTest {
         final ApplicationUser user = buildUser(3L, username);
         final List<CuisineDish> allDishes = buildDishes(20);
         final List<DishChoiceCount> counts = LongStream.rangeClosed(1L, 20L)
-                .mapToObj(id -> new DishChoiceCount(id, 200L - id))
+                .mapToObj(id -> new DishChoiceCount(id, 200L - id, Instant.parse("2026-01-01T00:00:00Z").plusSeconds(id)))
                 .toList();
 
         mockCommonDependencies(user, allDishes, counts);
@@ -135,12 +155,10 @@ class DishRotationServiceImplTest {
 
         final DishChoiceRecommendation result = dishRotationService.getRecommendations(username);
 
-        assertEquals(8, result.userFavorites().size());
+        assertEquals(0, result.userFavorites().size());
         assertEquals(8, result.userDiscovery().size());
-        assertEquals(5, result.userLeastOftenInTop().size());
-        assertEquals(List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L), extractDishIds(result.userFavorites()));
+        assertEquals(0, result.userLeastOftenInTop().size());
         assertEquals(List.of(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L), extractDishIds(result.userDiscovery()));
-        assertEquals(List.of(4L, 5L, 6L, 7L, 8L), extractDishIds(result.userLeastOftenInTop()));
     }
 
     private void mockCommonDependencies(ApplicationUser user, List<CuisineDish> allDishes, List<DishChoiceCount> choiceCounts) {
@@ -172,11 +190,11 @@ class DishRotationServiceImplTest {
 
     private List<DishChoiceCount> toChoiceCounts(Map<Long, Long> countByDishId) {
         return countByDishId.entrySet().stream()
-                .map(entry -> new DishChoiceCount(entry.getKey(), entry.getValue()))
+                .map(entry -> new DishChoiceCount(entry.getKey(), entry.getValue(), Instant.now()))
                 .toList();
     }
 
-    private List<Long> extractDishIds(List<CuisineDish> dishes) {
-        return dishes.stream().map(CuisineDish::getId).collect(Collectors.toList());
+    private List<Long> extractDishIds(List<DishChoiceRecommendationItem> dishes) {
+        return dishes.stream().map(item -> item.dish().getId()).collect(Collectors.toList());
     }
 }

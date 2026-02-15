@@ -13,7 +13,7 @@ import java.util.List;
 public interface DishChoiceRepository extends JpaRepository<DishChoice, Long> {
 
     @Query("""
-            select new com.camlong.homnayangi.dto.DishChoiceCount(dc.dish.id, count(dc.id))
+            select new com.camlong.homnayangi.dto.DishChoiceCount(dc.dish.id, count(dc.id), max(dc.createdAt))
             from DishChoice dc
             where dc.user.id = :userId
             group by dc.dish.id

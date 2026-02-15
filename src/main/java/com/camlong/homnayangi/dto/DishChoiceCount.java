@@ -1,4 +1,6 @@
 package com.camlong.homnayangi.dto;
 
-public record DishChoiceCount(Long dishId, long choiceCount) {
+import java.time.Instant;
+
+public record DishChoiceCount(Long dishId, long choiceCount, Instant lastChosenTime) {
 }
