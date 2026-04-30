@@ -2,6 +2,7 @@ package com.camlong.homnayangi.service.impl;
 
 import com.camlong.homnayangi.config.exception.BusinessException;
 import com.camlong.homnayangi.dto.AuthResponse;
+import com.camlong.homnayangi.dto.GetUserInfoResponse;
 import com.camlong.homnayangi.service.AuthService;
 import com.camlong.homnayangi.config.auth.JwtUtils;
 import com.camlong.homnayangi.entity.ApplicationUser;
@@ -71,6 +72,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     log.info("[Logout] User logged out: {}", token.getUsername());
+  }
+
+  @Override
+  public GetUserInfoResponse getUserInfoResponse(String username) {
+    log.info("[getUserInfoResponse] Start retrieving user info for {}", username);
+
+    final ApplicationUser appUser = applicationUserRepository.findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException("No user found for this username"));
+
+    return new GetUserInfoResponse(String.valueOf(appUser.getId()), appUser.getUsername());
   }
 
   @Override
