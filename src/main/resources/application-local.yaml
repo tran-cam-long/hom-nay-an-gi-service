@@ -7,7 +7,7 @@ spring:
   datasource:
     host: localhost
     port: 5432
-    dbname: demo_app
+    dbname: homnayangi_db
     url: jdbc:postgresql://${spring.datasource.host}:${spring.datasource.port}/${spring.datasource.dbname}
     username: postgres
     password: postgres
@@ -19,5 +19,8 @@ spring:
       name: admin
       password: admin
 
+jwt:
+  secret: cqManIGq8R3i52nC8rL2wBEqBYuacxQ8pd14OTh5fLu
+
 server:
-  port: 8099
+  port: 8100
